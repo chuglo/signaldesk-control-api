@@ -10,7 +10,7 @@ from threading import Event
 from uuid import UUID
 
 from redis import Redis
-from signaldesk_contracts import parse_event_json
+from signaldesk_contracts import REDIS_STREAM_BY_EVENT_TYPE, parse_event_json
 from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
@@ -27,14 +27,6 @@ logger = logging.getLogger(__name__)
 
 _RETRY_BASE_SECONDS = 30
 _RETRY_MAX_SECONDS = 300
-
-STREAM_BY_EVENT_TYPE = {
-    "diagnostic.requested.v1": "signaldesk:diagnostics",
-    "diagnostic.completed.v1": "signaldesk:diagnostic-completions",
-    "email.requested.v1": "signaldesk:emails",
-    "export.requested.v1": "signaldesk:exports",
-    "export.completed.v1": "signaldesk:export-completions",
-}
 
 _AGGREGATE_FIELD_BY_EVENT_TYPE = {
     "diagnostic.requested.v1": "diagnostic_job_id",
@@ -226,7 +218,7 @@ def publish_batch(*, session: Session, redis_client: Redis, batch_size: int = 10
         attempted_ids.add(event_id)
         try:
             canonical = _canonical_event(event)
-            stream = STREAM_BY_EVENT_TYPE[event.event_type]
+            stream = REDIS_STREAM_BY_EVENT_TYPE[event.event_type]
             marker_key = f"signaldesk:outbox:published:{event.id}"
             result = redis_client.eval(
                 _PUBLISH_ONCE_LUA,
