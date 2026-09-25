@@ -1,5 +1,7 @@
 # signaldesk-control-api
 
+**Not for production use.**
+
 SignalDesk control-plane API and transactional outbox publisher.
 
 ## Outbox publisher
@@ -48,3 +50,7 @@ Development uses uv's portable sibling source declaration
 must therefore include both sibling repositories in its build context and install
 the contracts wheel first (or resolve version 0.2.0 from a package index); copying
 contracts into this repository would break the independent repository boundary.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
