@@ -44,7 +44,7 @@ instance, not Redis Cluster.
 
 Development uses uv's portable sibling source declaration
 `../signaldesk-contracts`. A wheel contains the normal dependency
-`signaldesk-contracts==0.1.0`, not the local path. The later Compose image build
+`signaldesk-contracts==0.2.0`, not the local path. The later Compose image build
 must therefore include both sibling repositories in its build context and install
-the contracts wheel first (or resolve version 0.1.0 from a package index); copying
+the contracts wheel first (or resolve version 0.2.0 from a package index); copying
 contracts into this repository would break the independent repository boundary.
